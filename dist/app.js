@@ -3,11 +3,17 @@
 
 const dom = require('./dom');
 
+let dinosaurs = [];
+
 const initializer = () => {
     dom([{name: 'dino!'}]);
 };
 
-module.exports = {initializer};
+const getDinosaurs = () => {
+    return dinosaurs;
+};
+
+module.exports = {initializer, getDinosaurs};
 },{"./dom":2}],2:[function(require,module,exports){
 'use strict';
 
