@@ -1,2 +1,4 @@
 'use strict';
-console.log('main.js working');
+const dom = require('./dom');
+
+dom.buildDomString([{name: 'dino!'}]);
