@@ -1,7 +1,7 @@
 'use strict';
 
-const dom = require('./dom');
+const data = require('./data');
 
 $(document).ready(function() {
-    dom([{name: 'dino!'}]);
+    data.initializer();
 });
