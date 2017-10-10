@@ -29,7 +29,7 @@ let dinosaurs = [];
 //     });
 // };
 
-let firstDinosaurJSON = () => {
+const firstDinosaurJSON = () => {
     return new Promise((resolve, reject) => {
         $.ajax("./db/dinosaurs.json").done((data1) => {
             resolve(data1.dinosaurs1);    
@@ -39,7 +39,7 @@ let firstDinosaurJSON = () => {
     });
 };
 
-let secondDinosaurJSON = () => {
+const secondDinosaurJSON = () => {
     return new Promise((resolve, reject) => {
         $.ajax("./db/dinosaurs2.json").done((data2) => {
             resolve(data2.dinosaurs2);    
@@ -49,7 +49,7 @@ let secondDinosaurJSON = () => {
     });
 };
 
-let thirdDinosaurJSON = () => {
+const thirdDinosaurJSON = () => {
     return new Promise((resolve, reject) => {
         $.ajax("./db/dinosaurs3.json").done((data3) => {
             resolve(data3.dinosaurs3);    
@@ -60,25 +60,64 @@ let thirdDinosaurJSON = () => {
 };
 
 //PROMISE WORKS - promise pyramid of DOOM
-let dinoGetter = () => {
-    firstDinosaurJSON().then((results1) => {
-        results1.forEach((dino) => {
-            dinosaurs.push(dino);
-        });
-        secondDinosaurJSON().then((results2) => {
-            results2.forEach((dino) => {
+// const dinoGetter = () => {
+//     firstDinosaurJSON().then((results1) => {
+//         results1.forEach((dino) => {
+//             dinosaurs.push(dino);
+//         });
+//         secondDinosaurJSON().then((results2) => {
+//             results2.forEach((dino) => {
+//                 dinosaurs.push(dino);
+//             });
+//         });
+//         thirdDinosaurJSON().then((results3) => {
+//             results3.forEach((dino) => {
+//                 dinosaurs.push(dino);
+//             });
+//         });
+//         console.log('dinsaurs array result:', dinosaurs);
+//     }).catch((error) => {
+//         console.log('error from dino1:', error);
+//     });
+// };
+
+//PROMISE - Correct way
+// const dinoGetter = () => {
+//     firstDinosaurJSON().then((results1) => {
+//         results1.forEach((dino) => {
+//             dinosaurs.push(dino);
+//         });
+//         return secondDinosaurJSON();
+//     }).then((results2) => {
+//         results2.forEach((dino) => {
+//             dinosaurs.push(dino);
+//         });
+//     return thirdDinosaurJSON();
+//     }).then((results3) => {
+//         results3.forEach((dino) => {
+//             dinosaurs.push(dino);
+//         });
+//         console.log('dinsaurs array result:', dinosaurs);
+//         makeDinos();
+//     });
+// };
+
+const dinoGetter = () => {
+    Promise.all([firstDinosaurJSON(), secondDinosaurJSON(), thirdDinosaurJSON()]).then((results) => {
+        console.log('results from promise.all', results);
+        results.forEach((result) => {
+            result.forEach((dino) => {
                 dinosaurs.push(dino);
             });
         });
-        thirdDinosaurJSON().then((results3) => {
-            results3.forEach((dino) => {
-                dinosaurs.push(dino);
-            });
-        });
-        console.log('dinsaurs array result:', dinosaurs);
+        makeDinos();
     }).catch((error) => {
-        console.log('error from dino1:', error);
+        console.log('error from Promise.all', error);
     });
+};
+
+const makeDinos = () => {
+    dom(dinosaurs);
 };
 
 const initializer = () => {
