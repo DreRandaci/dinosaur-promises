@@ -14,4 +14,4 @@ const writeToDom = (domString) => {
     $('#dinosaurs').html(domString);
 };
 
-module.exports = {buildDomString};
+module.exports = buildDomString;

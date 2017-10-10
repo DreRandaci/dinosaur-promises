@@ -1,4 +1,7 @@
 'use strict';
+
 const dom = require('./dom');
 
-dom.buildDomString([{name: 'dino!'}]);
+$(document).ready(function() {
+    dom([{name: 'dino!'}]);
+});
