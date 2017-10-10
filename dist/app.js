@@ -15,10 +15,13 @@ const writeToDom = (domString) => {
     $('#dinosaurs').html(domString);
 };
 
-module.exports = {buildDomString};
+module.exports = buildDomString;
 },{}],2:[function(require,module,exports){
 'use strict';
+
 const dom = require('./dom');
 
-dom.buildDomString([{name: 'dino!'}]);
+$(document).ready(function() {
+    dom([{name: 'dino!'}]);
+});
 },{"./dom":1}]},{},[2]);
