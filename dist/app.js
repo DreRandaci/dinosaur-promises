@@ -5,31 +5,6 @@ const dom = require('./dom');
 
 let dinosaurs = [];
 
-// The old way - pyramid of doom
-// const dinoGetter = () => {
-//     $.ajax("./db/dinosaurs.json").done((data1) => {
-//         console.log('data1:', data1);
-//         data1.dinosaurs1.forEach((dino) => {
-//             dinosaurs.push(dino);
-//         });
-//         console.log('dinosaurs array:', dinosaurs);
-//             $.ajax("./db/dinosaurs2.json").done((data2) => {
-//                 console.log('data2:', data2);
-//                 data2.dinosaurs2.forEach((dino) => {
-//                     dinosaurs.push(dino);
-//                 });
-//             console.log('dinosaurs array with dinosaurs2:', dinosaurs);
-//                 $.ajax("./db/dinosaurs3.json").done((data3) => {
-//                     console.log('data3:', data3);
-//                     data3.dinosaurs3.forEach((dino) => {
-//                         dinosaurs.push(dino);
-//                     });
-//                 console.log('dinosaurs array with dinosaurs3:', dinosaurs);        
-//             });
-//         });
-//     });
-// };
-
 const firstDinosaurJSON = () => {
     return new Promise((resolve, reject) => {
         $.ajax("./db/dinosaurs.json").done((data1) => {
@@ -60,58 +35,34 @@ const thirdDinosaurJSON = () => {
     });
 };
 
-//PROMISE WORKS - promise pyramid of DOOM
-// const dinoGetter = () => {
-//     firstDinosaurJSON().then((results1) => {
-//         results1.forEach((dino) => {
-//             dinosaurs.push(dino);
-//         });
-//         secondDinosaurJSON().then((results2) => {
-//             results2.forEach((dino) => {
-//                 dinosaurs.push(dino);
-//             });
-//         });
-//         thirdDinosaurJSON().then((results3) => {
-//             results3.forEach((dino) => {
-//                 dinosaurs.push(dino);
-//             });
-//         });
-//         console.log('dinsaurs array result:', dinosaurs);
-//     }).catch((error) => {
-//         console.log('error from dino1:', error);
-//     });
-// };
-
-//PROMISE - Correct way
-// const dinoGetter = () => {
-//     firstDinosaurJSON().then((results1) => {
-//         results1.forEach((dino) => {
-//             dinosaurs.push(dino);
-//         });
-//         return secondDinosaurJSON();
-//     }).then((results2) => {
-//         results2.forEach((dino) => {
-//             dinosaurs.push(dino);
-//         });
-//     return thirdDinosaurJSON();
-//     }).then((results3) => {
-//         results3.forEach((dino) => {
-//             dinosaurs.push(dino);
-//         });
-//         console.log('dinsaurs array result:', dinosaurs);
-//         makeDinos();
-//     });
-// };
+const allTheCats = () => {
+    return new Promise((resolve, reject) => {
+        $.ajax("./db/catSnacks.json").done((catData) => {
+            resolve(catData.cats);    
+        }).fail((error) => {
+            reject(error);
+        });
+    });
+};
 
 const dinoGetter = () => {
     Promise.all([firstDinosaurJSON(), secondDinosaurJSON(), thirdDinosaurJSON()]).then((results) => {
-        console.log('results from promise.all', results);
+        allTheCats().then((cats) => {
         results.forEach((result) => {
             result.forEach((dino) => {
+                dino.snacks = [];
+                dino.catIds.forEach((catId) => {
+                    cats.forEach((cat) => {
+                        if (cat.id === catId) {
+                            dino.snacks.push(cat);
+                        }
+                    });
+                });
                 dinosaurs.push(dino);
             });
         });
         makeDinos();
+    });        
     }).catch((error) => {
         console.log('error from Promise.all', error);
     });
@@ -134,11 +85,12 @@ module.exports = {initializer, getDinosaurs};
 'use strict';
 
 const buildDomString = (dinosaur) => {
-    console.log('buildDom entered', dinosaur);
+    console.log('dinosaurs in buildDom', dinosaur);
     let domString = '';
     dinosaur.forEach((dino) => {
         domString += `<div class='col-md-3'>`;
-        domString +=    `<h1>${dino.type}</h1>`;
+        domString +=    `<h3>${dino.type}</h3>`;
+        // domString +=    `<h4>${dino.snacks.name}</h4>`;
         domString += `</div>`;
     });
     writeToDom(domString);
