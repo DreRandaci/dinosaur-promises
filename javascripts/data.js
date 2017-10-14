@@ -68,7 +68,9 @@ const dinoGetter = () => {
 };
 
 const makeDinos = () => {
-    dom(dinosaurs);
+    dinosaurs.forEach((dino) => {
+		dom(dino);
+	});
 };
 
 const initializer = () => {
